@@ -1,35 +1,53 @@
-import 'express-async-errors';
-
-import { PrismaClient } from '@prisma/client';
-import express, { json } from 'express';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import { Express } from 'express';
 
-const app = express();
-app.use(json());
+import * as middlewares from './helpers/middlewares';
+import type { ResponseBack } from './types/MessageResponse';
+
+const app:Express = express();
+
+// Middlewares
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
+app.use(mongoSanitize());
+app.use(morgan('common'));
 app.use(helmet());
+app.use(mongoSanitize());
 
-const prisma = new PrismaClient();
+app.use(
+  cors({
+    origin: '*',
+  }),
+);
+dotenv.config();
+app.disable('x-powered-by');
 
-app.get('/', (_, res) => {
-  res.json({
-    msg: 'Hello World',
-  });
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
 });
+app.use('/api', limiter);
 
-app.get('/prisma', async (_, res) => {
-  await prisma.user.create({
+// Routes
+app.get<unknown, ResponseBack>('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
     data: {
-      email: 'random@example.com',
+      message: 'success',
     },
   });
-
-  res.json({
-    msg: 'Add a new unique user without duplicate',
-  });
 });
 
-app.use((_, res, _2) => {
-  res.status(404).json({ error: 'NOT FOUND' });
-});
+app.use(middlewares.errorHandler);
+app.use(middlewares.notFound);
 
-export { app };
+export default app;
