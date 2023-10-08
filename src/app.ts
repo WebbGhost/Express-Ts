@@ -8,6 +8,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { Express } from 'express';
 
+import healthCheckRoute from './routes/healthcheck'
+
 import * as middlewares from './helpers/middlewares';
 import type { ResponseBack } from './types/MessageResponse';
 
@@ -21,6 +23,7 @@ app.use(mongoSanitize());
 app.use(morgan('common'));
 app.use(helmet());
 app.use(mongoSanitize());
+
 
 app.use(
   cors({
@@ -36,6 +39,7 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('/api', limiter);
+app.use('/api/v1',healthCheckRoute)
 
 // Routes
 app.get<unknown, ResponseBack>('/', (req, res) => {
