@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "types": [
+      "vitest/globals"
+    ],
     "lib": ["es2017"],
     "module": "esnext",
     "moduleResolution": "node",

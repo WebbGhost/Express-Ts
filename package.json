@@ -4,6 +4,9 @@
   "description": "Serverless framework ExpressJS TypeScript",
   "scripts": {
     "start": "tsx watch src/server.ts",
+    "test:watch": "vitest",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist .esbuild .serverless",
     "lint": "eslint .",
     "format": "eslint --fix . && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
