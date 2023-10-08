@@ -7,7 +7,9 @@
       "label": "Project wide type checking with TypeScript",
       "type": "npm",
       "script": "check-types",
-      "problemMatcher": ["$tsc"],
+      "problemMatcher": [
+        "$tsc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
@@ -15,6 +17,47 @@
       "presentation": {
         "clear": true,
         "reveal": "never"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "platform": "node",
+      "dockerBuild": {
+        "dockerfile": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash/Dockerfile",
+        "context": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash",
+        "pull": true
+      },
+      "node": {
+        "package": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: release",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash/package.json"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run: debug",
+      "dependsOn": [
+        "docker-build"
+      ],
+      "dockerRun": {
+        "env": {
+          "DEBUG": "*",
+          "NODE_ENV": "development"
+        }
+      },
+      "node": {
+        "package": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash/package.json",
+        "enableDebugging": true
       }
     }
   ]

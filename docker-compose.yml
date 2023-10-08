@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  imurmurhash:
+    image: imurmurhash
+    build:
+      context: node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8080:8080

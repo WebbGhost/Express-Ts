@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  imurmurhash:
+    image: imurmurhash
+    build:
+      context: node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8080:8080
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "imurmurhash.js"]

@@ -9,13 +9,35 @@
       "request": "launch",
       "name": "Severless debug",
       "program": "${workspaceFolder}/node_modules/.bin/sls",
-      "args": ["offline", "start", "--stage", "offline"],
-      "env": { "NODE_ENV": "development" },
+      "args": [
+        "offline",
+        "start",
+        "--stage",
+        "offline"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
       "autoAttachChildProcesses": true,
       "sourceMaps": true,
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "console": "integratedTerminal",
-      "outFiles": ["${workspaceFolder}/.esbuild/.build/**/*.js"]
+      "outFiles": [
+        "${workspaceFolder}/.esbuild/.build/**/*.js"
+      ]
+    },
+    {
+      "name": "Docker Node.js Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash/package.json",
+        "localRoot": "${workspaceFolder}/node_modules/.pnpm/imurmurhash@0.1.4/node_modules/imurmurhash"
+      }
     }
   ]
 }
